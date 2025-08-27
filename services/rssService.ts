@@ -1,16 +1,22 @@
 import { SecurityAdvisory } from '../types';
 
-// Using a CORS proxy to fetch the RSS feed from the browser.
-// Switched to a different proxy to resolve fetching issues.
-const RSS_FEED_URL = 'https://corsproxy.io/?https://www.drupal.org/security/rss.xml';
+export type FeedType = 'all' | 'core' | 'contrib';
+
+const FEED_URLS: Record<FeedType, string> = {
+    all: 'https://www.drupal.org/security/all/rss.xml',
+    core: 'https://www.drupal.org/security/rss.xml', // Core is the default feed
+    contrib: 'https://www.drupal.org/security/contrib/rss.xml'
+};
 
 /**
- * Fetches and parses the Drupal security advisories RSS feed.
+ * Fetches and parses the Drupal security advisories RSS feed based on the selected type.
+ * @param feedType The type of feed to fetch ('all', 'core', or 'contrib').
  * @returns A promise that resolves to an array of SecurityAdvisory objects.
  */
-export const fetchAdvisories = async (): Promise<SecurityAdvisory[]> => {
+export const fetchAdvisories = async (feedType: FeedType = 'all'): Promise<SecurityAdvisory[]> => {
+  const url = `https://corsproxy.io/?${encodeURIComponent(FEED_URLS[feedType])}`;
   try {
-    const response = await fetch(RSS_FEED_URL);
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

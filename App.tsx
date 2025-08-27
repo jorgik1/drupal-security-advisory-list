@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { SecurityAdvisory } from './types';
-import { fetchAdvisories } from './services/rssService';
+import { fetchAdvisories, FeedType } from './services/rssService';
 import { AdvisoryCard } from './components/AdvisoryCard';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorMessage } from './components/ErrorMessage';
 import { ShieldIcon, SearchIcon } from './components/Icons';
 import { Pagination } from './components/Pagination';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
+import { FeedSelector } from './components/FeedSelector';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -16,13 +17,14 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [feedType, setFeedType] = useState<FeedType>('all');
 
   useEffect(() => {
     const loadAdvisories = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const fetchedAdvisories = await fetchAdvisories();
+        const fetchedAdvisories = await fetchAdvisories(feedType);
         setAdvisories(fetchedAdvisories);
       } catch (err) {
         if (err instanceof Error) {
@@ -36,7 +38,7 @@ const App: React.FC = () => {
     };
 
     loadAdvisories();
-  }, []);
+  }, [feedType]);
 
   const filteredAdvisories = useMemo(() => {
     return advisories.filter(advisory =>
@@ -47,7 +49,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, feedType]);
 
   const totalPages = Math.ceil(filteredAdvisories.length / ITEMS_PER_PAGE);
 
@@ -117,18 +119,22 @@ const App: React.FC = () => {
           </p>
         </header>
 
-        <div className="relative mb-8">
-            <input
-                type="text"
-                placeholder="Search advisories..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <SearchIcon className="h-5 w-5 text-zinc-500" />
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            <div className="relative flex-grow">
+                <input
+                    type="text"
+                    placeholder="Search advisories..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <SearchIcon className="h-5 w-5 text-zinc-500" />
+                </div>
             </div>
+            <FeedSelector selectedFeed={feedType} onSelectFeed={setFeedType} />
         </div>
+
 
         <section>
           {renderContent()}
