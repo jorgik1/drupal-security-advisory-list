@@ -1,0 +1,5 @@
+{
+  "name": "Drupal Security Feed",
+  "description": "An elegant, Apple Music-inspired web application that displays the latest security advisories for Drupal from its official RSS feed. Features a clean, dark-mode UI for easy reading.",
+  "requestFramePermissions": []
+}
