@@ -161,7 +161,7 @@ const App: React.FC = () => {
         )}
         
         <footer className="text-center py-8 mt-8 text-zinc-500 dark:text-zinc-600 text-sm">
-            <p>UI inspired by Apple Music. Data provided by Drupal.org.</p>
+            <p>Data provided by Drupal.org.</p>
         </footer>
       </main>
     </div>
