@@ -99,15 +99,15 @@ export const SearchIcon: React.FC<IconProps> = ({ className }) => (
 );
 
 export const BugAntIcon: React.FC<IconProps> = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
-        <path fillRule="evenodd" d="M9 3.5A5.5 5.5 0 0 0 3.5 9v8.25a.75.75 0 0 0 1.5 0V9A4 4 0 0 1 9 5h6a4 4 0 0 1 4 4v8.25a.75.75 0 0 0 1.5 0V9A5.5 5.5 0 0 0 15 3.5H9Zm-3.22 10.59a.75.75 0 0 0 1.06-.02l.02-.02 2.32-2.32a.75.75 0 0 0-1.06-1.06l-2.32 2.32-.02.02a.75.75 0 0 0-.02 1.06Zm13.5 0a.75.75 0 0 1-.02 1.06l-.02.02-2.32 2.32a.75.75 0 1 1-1.06-1.06l2.32-2.32.02-.02a.75.75 0 0 1 1.06-.02ZM12 12.25a.75.75 0 0 0-1.5 0v2.5a.75.75 0 0 0 1.5 0v-2.5ZM10.5 18a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clipRule="evenodd" />
-        <path d="M11.25 18a.75.75 0 0 0-1.5 0v2.25a.75.75 0 0 0 1.5 0V18Zm2.25 0a.75.75 0 0 1 1.5 0v2.25a.75.75 0 0 1-1.5 0V18Z" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+        <path d="m9 12 2 2 4-4" />
     </svg>
 );
 
 
 export const ListBulletIcon: React.FC<IconProps> = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className}>
         <path fillRule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clipRule="evenodd" />
     </svg>
 );
