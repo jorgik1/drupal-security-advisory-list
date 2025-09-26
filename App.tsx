@@ -4,14 +4,17 @@ import { fetchAdvisories, FeedType } from './services/rssService';
 import { AdvisoryCard } from './components/AdvisoryCard';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { ErrorMessage } from './components/ErrorMessage';
-import { ShieldIcon, SearchIcon } from './components/Icons';
+import { SearchIcon, ListBulletIcon } from './components/Icons';
 import { Pagination } from './components/Pagination';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { FeedSelector } from './components/FeedSelector';
+import { ViewSelector, ViewType } from './components/ViewSelector';
+import { VulnerabilityChecker } from './components/VulnerabilityChecker';
 
 const ITEMS_PER_PAGE = 10;
 
 const App: React.FC = () => {
+  const [view, setView] = useState<ViewType>('feed');
   const [advisories, setAdvisories] = useState<SecurityAdvisory[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,6 +23,8 @@ const App: React.FC = () => {
   const [feedType, setFeedType] = useState<FeedType>('all');
 
   useEffect(() => {
+    if (view !== 'feed') return; // Only fetch advisories for the feed view
+
     const loadAdvisories = async () => {
       try {
         setIsLoading(true);
@@ -38,7 +43,7 @@ const App: React.FC = () => {
     };
 
     loadAdvisories();
-  }, [feedType]);
+  }, [feedType, view]);
 
   const filteredAdvisories = useMemo(() => {
     return advisories.filter(advisory =>
@@ -66,8 +71,7 @@ const App: React.FC = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
 
-
-  const renderContent = () => {
+  const renderFeedContent = () => {
     if (isLoading) {
       return (
         <div className="flex flex-col items-center justify-center h-64">
@@ -99,54 +103,61 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen font-sans">
       <main className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-        <header className="py-8">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center space-x-4 mb-4">
-               <div className="bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                  <ShieldIcon className="h-8 w-8 text-blue-500"/>
-               </div>
-               <div>
-                  <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Live Feed</p>
-                  <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-zinc-900 dark:text-zinc-100">
-                      Drupal Security
-                  </h1>
-               </div>
-            </div>
-            <ThemeSwitcher />
-          </div>
-          <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl">
-            The latest security notifications, advisories, and news from the Drupal security team. Stay informed and keep your sites secure.
-          </p>
-        </header>
-
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            <div className="relative flex-grow">
-                <input
-                    type="text"
-                    placeholder="Search advisories..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <SearchIcon className="h-5 w-5 text-zinc-500" />
-                </div>
-            </div>
-            <FeedSelector selectedFeed={feedType} onSelectFeed={setFeedType} />
+        <div className="flex justify-between items-center mb-6">
+          <ViewSelector selectedView={view} onSelectView={setView} />
+          <ThemeSwitcher />
         </div>
+        
+        {view === 'feed' ? (
+          <>
+            <header className="py-8">
+              <div className="flex items-center space-x-4 mb-4">
+                 <div className="bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                    <ListBulletIcon className="h-8 w-8 text-blue-500"/>
+                 </div>
+                 <div>
+                    <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Live Feed</p>
+                    <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-zinc-900 dark:text-zinc-100">
+                        Drupal Security
+                    </h1>
+                 </div>
+              </div>
+              <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl">
+                The latest security notifications, advisories, and news from the Drupal security team. Stay informed and keep your sites secure.
+              </p>
+            </header>
 
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <div className="relative flex-grow">
+                    <input
+                        type="text"
+                        placeholder="Search advisories..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <SearchIcon className="h-5 w-5 text-zinc-500" />
+                    </div>
+                </div>
+                <FeedSelector selectedFeed={feedType} onSelectFeed={setFeedType} />
+            </div>
 
-        <section>
-          {renderContent()}
-        </section>
+            <section>
+              {renderFeedContent()}
+            </section>
 
-        {filteredAdvisories.length > ITEMS_PER_PAGE && (
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPrevPage={handlePrevPage}
-                onNextPage={handleNextPage}
-            />
+            {filteredAdvisories.length > ITEMS_PER_PAGE && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPrevPage={handlePrevPage}
+                    onNextPage={handleNextPage}
+                />
+            )}
+          </>
+        ) : (
+          <VulnerabilityChecker />
         )}
         
         <footer className="text-center py-8 mt-8 text-zinc-500 dark:text-zinc-600 text-sm">
