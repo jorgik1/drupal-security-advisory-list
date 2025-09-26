@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { SecurityAdvisory } from './types';
-import { fetchAdvisories, FeedType } from './services/rssService';
-import { AdvisoryCard } from './components/AdvisoryCard';
-import { LoadingSpinner } from './components/LoadingSpinner';
-import { ErrorMessage } from './components/ErrorMessage';
-import { SearchIcon, ListBulletIcon } from './components/Icons';
-import { Pagination } from './components/Pagination';
-import { ThemeSwitcher } from './components/ThemeSwitcher';
-import { FeedSelector } from './components/FeedSelector';
-import { ViewSelector, ViewType } from './components/ViewSelector';
-import { VulnerabilityChecker } from './components/VulnerabilityChecker';
+import { fetchAdvisories, FeedType } from './src/services/rssService';
+import { AdvisoryCard } from './src/components/AdvisoryCard';
+import { LoadingSpinner } from './src/components/LoadingSpinner';
+import { ErrorMessage } from './src/components/ErrorMessage';
+import { SearchIcon, ListBulletIcon } from './src/components/Icons';
+import { Pagination } from './src/components/Pagination';
+import { ThemeSwitcher } from './src/components/ThemeSwitcher';
+import { FeedSelector } from './src/components/FeedSelector';
+import { ViewSelector, ViewType } from './src/components/ViewSelector';
+import { VulnerabilityChecker } from './src/components/VulnerabilityChecker';
 
 const ITEMS_PER_PAGE = 10;
 
